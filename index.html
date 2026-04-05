@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>건축기사 실기 암기 위키 - 완전판</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif; 
+            line-height: 1.8; 
+            color: #202122; 
+            margin: 0; 
+            display: flex; 
+            background-color: #f6f6f6; 
+        }
+        
+        /* 사이드바 */
+        #sidebar { 
+            width: 280px; 
+            background: linear-gradient(to bottom, #f6f6f6, #e8f4f8); 
+            border-right: 1px solid #a7d7f9; 
+            padding: 20px; 
+            position: fixed; 
+            height: 100vh; 
+            overflow-y: auto; 
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        #sidebar h2 { 
+            font-size: 1.3em; 
+            border-bottom: 2px solid #36c; 
+            padding-bottom: 8px; 
+            color: #36c;
+            margin-top: 0;
+        }
+        #sidebar ul { list-style: none; padding: 0; }
+        #sidebar li { margin-bottom: 10px; position: relative; }
+        #sidebar a { 
+            text-decoration: none; 
+            color: #0645ad; 
+            font-size: 0.95em; 
+            display: block;
+            padding: 5px 8px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        #sidebar a:hover { 
+            background-color: #e3f2fd;
+            transform: translateX(5px);
+        }
+        #sidebar a.active {
+            background-color: #36c;
+            color: white;
+            font-weight: bold;
+        }
+        #sidebar a.bookmarked::after {
+            content: "🔖";
+            position: absolute;
+            right: 10px;
+        }
+
+        #menuToggle { 
+            display: none; 
+            position: fixed; 
+            top: 15px; 
+            left: 15px; 
+            z-index: 1001; 
+            background: #36c; 
+            color: white; 
+            border: none; 
+            padding: 10px 15px; 
+            border-radius: 5px; 
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+
+        /* 메인 컨텐츠 */
+        #content { 
+            margin-left: 300px; 
+            background: #fff; 
+            padding: 50px; 
+            max-width: 1000px; 
+            border-left: 1px solid #a2a9b1; 
+            min-height: 100vh; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.08); 
+            flex: 1;
+        }
+        
+        h1 { 
+            border-bottom: 3px solid #36c; 
+            font-size: 2.5em; 
+            margin-top: 0; 
+            color: #36c;
+            padding-bottom: 15px;
+        }
+        h2 { 
+            border-bottom: 2px solid #a2a9b1; 
+            font-size: 1.8em; 
+            margin-top: 60px; 
+            color: #000; 
+            background: linear-gradient(to right, #f8f9fa, #ffffff); 
+            padding: 10px 15px; 
+            border-left: 5px solid #36c;
+            scroll-margin-top: 20px;
+            position: relative;
+        }
+        h2 .bookmark-btn {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        h2 .bookmark-btn:hover {
+            transform: translateY(-50%) scale(1.2);
+        }
+        h3 { 
+            background: linear-gradient(135deg, #eaecf0, #f8f9fa); 
+            padding: 8px 15px; 
+            border-radius: 5px; 
+            font-size: 1.2em; 
+            margin-top: 35px; 
+            border-left: 5px solid #ffa726;
+            cursor: pointer;
+            transition: all 0.3s;
+            scroll-margin-top: 20px;
+        }
+        h3:hover {
+            background: linear-gradient(135deg, #ffa726, #ffb74d);
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        strong { color: #d33; font-weight: bold; } 
+        mark { 
+            background: linear-gradient(to bottom, transparent 50%, #fff59d 50%); 
+            color: #000; 
+            padding: 2px 4px; 
+            border-radius: 2px;
+            font-weight: 500;
+        }
+
+        /* 툴팁 */
+        .tooltip { 
+            position: relative; 
+            display: inline-block; 
+            cursor: help; 
+            background: #36c;
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            text-align: center;
+            line-height: 22px;
+            font-size: 0.85em;
+            font-weight: bold; 
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        .tooltip .tooltiptext { 
+            visibility: hidden; 
+            width: 280px; 
+            background: linear-gradient(135deg, #1a237e, #283593);
+            color: #fff; 
+            text-align: left; 
+            border-radius: 10px; 
+            padding: 15px; 
+            position: absolute; 
+            z-index: 100; 
+            bottom: 140%; 
+            left: 50%; 
+            margin-left: -140px; 
+            opacity: 0; 
+            transition: all 0.3s; 
+            font-size: 0.9em; 
+            font-weight: normal; 
+            line-height: 1.6; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            border: 2px solid #5c6bc0;
+        }
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -8px;
+            border-width: 8px;
+            border-style: solid;
+            border-color: #283593 transparent transparent transparent;
+        }
+        .tooltip:hover .tooltiptext { 
+            visibility: visible; 
+            opacity: 1; 
+            bottom: 150%;
+        }
+
+        /* 시각자료 버튼 */
+        .visual-btn {
+            display: inline-block;
+            cursor: pointer;
+            background: #ff9800;
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            text-align: center;
+            line-height: 22px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-left: 8px;
+            vertical-align: middle;
+            border: none;
+            transition: all 0.3s;
+        }
+        .visual-btn:hover {
+            transform: scale(1.2);
+            background: #f57c00;
+        }
+        .visual-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 999;
+        }
+        .visual-overlay.show {
+            display: block;
+        }
+        .visual-content {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            z-index: 1000;
+            max-width: 90%;
+            max-height: 90vh;
+            overflow: auto;
+        }
+        .visual-content.show {
+            display: block;
+        }
+        .visual-content img {
+            max-width: 100%;
+            height: auto;
+        }
+        .close-visual {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 2em;
+            cursor: pointer;
+            color: #666;
+            background: none;
+            border: none;
+        }
+        
+        .q-box { 
+            border-left: 5px solid #36c; 
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            padding: 20px 25px; 
+            margin: 20px 0; 
+            border-radius: 5px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+        .q-box:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        table.wiki-table { 
+            border-collapse: collapse; 
+            width: 100%; 
+            margin: 25px 0; 
+            font-size: 0.95em; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        table.wiki-table th, table.wiki-table td { 
+            border: 1px solid #ddd; 
+            padding: 14px; 
+            text-align: left; 
+        }
+        table.wiki-table th { 
+            background: linear-gradient(to bottom, #36c, #2c5aa0); 
+            color: white;
+            font-weight: bold; 
+        }
+        table.wiki-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        table.wiki-table tr:hover {
+            background-color: #e3f2fd;
+        }
+
+        #progressContainer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #e0e0e0;
+            z-index: 1002;
+        }
+        #progressBar {
+            height: 100%;
+            background: linear-gradient(to right, #36c, #00bcd4);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        /* 상단 버튼 */
+        .top-buttons {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 1001;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+        .top-buttons button {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        .top-buttons button:hover {
+            transform: scale(1.05);
+        }
+        #quizToggle { background: #4caf50; }
+        #quizToggle.active { background: #f44336; }
+        #darkModeToggle { background: #424242; padding: 10px 15px; }
+        #flashcardToggle { background: #9c27b0; }
+        #flashcardToggle.active { background: #6a1b9a; }
+        #voiceToggle { background: #ff5722; }
+        #voiceToggle.active { background: #d84315; }
+        #bookmarkToggle { background: #ff9800; }
+        #quizModeBtn { background: #2196f3; }
+
+        #scrollTop {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #36c;
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            z-index: 999;
+        }
+        #scrollTop:hover {
+            background: #2c5aa0;
+            transform: scale(1.1);
+        }
+
+        #searchBox {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #36c;
+            border-radius: 25px;
+            font-size: 1em;
+            outline: none;
+            transition: all 0.3s;
+        }
+        #searchBox:focus {
+            box-shadow: 0 0 10px rgba(54, 108, 204, 0.3);
+        }
+        .highlight-search {
+            background-color: #ffeb3b !important;
+            padding: 2px 0;
+            border-radius: 3px;
+        }
+
+        /* 암기모드 */
+        .quiz-mode mark {
+            background: #333;
+            color: #333;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.3s;
+        }
+        .quiz-mode mark:hover {
+            background: #555;
+        }
+        .quiz-mode mark.revealed {
+            background: linear-gradient(to bottom, transparent 50%, #fff59d 50%);
+            color: #000;
+        }
+
+        /* 플래시카드 */
+        .flashcard-mode .q-box {
+            cursor: pointer;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+        .flashcard-mode .q-box.flipped .flashcard-front {
+            display: none;
+        }
+        .flashcard-mode .q-box.flipped .flashcard-back {
+            display: block;
+        }
+        .flashcard-mode .q-box .flashcard-front {
+            display: block;
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #36c;
+        }
+        .flashcard-mode .q-box .flashcard-back {
+            display: none;
+        }
+        .flashcard-mode .q-box::after {
+            content: "카드를 클릭하면 답이 나타납니다";
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+            font-size: 0.8em;
+            color: #999;
+        }
+
+        /* 퀴즈 모달 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+        }
+        .modal-overlay.show {
+            display: block;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+            z-index: 1001;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .modal.show {
+            display: block;
+        }
+        .quiz-question {
+            font-size: 1.3em;
+            margin-bottom: 30px;
+            color: #36c;
+            font-weight: bold;
+        }
+        .quiz-option {
+            background: #f5f5f5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        .quiz-option:hover {
+            background: #e3f2fd;
+            transform: translateX(5px);
+        }
+        .quiz-option.selected {
+            border-color: #36c;
+            background: #e3f2fd;
+        }
+        .quiz-option.correct {
+            border-color: #4caf50;
+            background: #c8e6c9;
+        }
+        .quiz-option.wrong {
+            border-color: #f44336;
+            background: #ffcdd2;
+        }
+        #quizResult {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+        #quizResult.correct {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+        #quizResult.wrong {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+        .quiz-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .quiz-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .quiz-buttons button:hover {
+            transform: translateY(-2px);
+        }
+
+        /* 북마크 */
+        #bookmarkList {
+            list-style: none;
+            padding: 0;
+        }
+        #bookmarkList li {
+            padding: 12px;
+            margin: 8px 0;
+            background: #f5f5f5;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #bookmarkList li:hover {
+            background: #e3f2fd;
+            transform: translateX(5px);
+        }
+        .remove-bookmark {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+        /* 음성읽기 */
+        .reading-highlight {
+            background: #ffeb3b !important;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* 반응형 */
+        @media (max-width: 1024px) {
+            #content { margin-left: 0; padding: 30px 25px; }
+            #sidebar { transform: translateX(-100%); }
+            #sidebar.show { transform: translateX(0); }
+            #menuToggle { display: block; }
+            .top-buttons { top: 60px; right: 10px; }
+            .top-buttons button { padding: 8px 12px; font-size: 0.85em; }
+        }
+
+        @media (max-width: 768px) {
+            #content { padding: 20px 15px; }
+            h1 { font-size: 1.7em; }
+            h2 { font-size: 1.3em; }
+            .tooltip .tooltiptext { width: 220px; margin-left: -110px; }
+        }
+
+        /* 다크모드 */
+        body.dark-mode { background-color: #1a1a1a; color: #e0e0e0; }
+        body.dark-mode #content { background: #2d2d2d; color: #e0e0e0; }
+        body.dark-mode #sidebar { background: linear-gradient(to bottom, #2d2d2d, #1a1a1a); }
+        body.dark-mode .q-box { background: linear-gradient(to right, #3a3a3a, #2d2d2d); }
+        body.dark-mode h2 { background: linear-gradient(to right, #3a3a3a, #2d2d2d); color: #64b5f6; }
+        body.dark-mode h3 { background: linear-gradient(135deg, #3a3a3a, #424242); color: #e0e0e0; }
+        body.dark-mode .modal { background: #2d2d2d; color: #e0e0e0; }
+        body.dark-mode .quiz-option { background: #3a3a3a; }
+    </style>
+</head>
+<body>
+
+<div id="progressContainer"><div id="progressBar"></div></div>
+<button id="menuToggle">☰</button>
+
+<div class="top-buttons">
+    <button id="quizModeBtn">📝 퀴즈</button>
+    <button id="quizToggle">🎯 암기모드</button>
+    <button id="flashcardToggle">🃏 플래시카드</button>
+    <button id="voiceToggle">🔊 음성읽기</button>
+    <button id="bookmarkToggle">🔖 북마크</button>
+    <button id="darkModeToggle">🌙</button>
+</div>
+
+<!-- 퀴즈 모달 -->
+<div class="modal-overlay" id="quizOverlay"></div>
+<div class="modal" id="quizModal">
+    <div style="text-align: center; font-size: 1.2em; margin-bottom: 20px; color: #36c;">
+        정답: <span id="correctCount">0</span> / 오답: <span id="wrongCount">0</span>
+    </div>
+    <div class="quiz-question" id="quizQuestion"></div>
+    <div id="quizOptions"></div>
+    <div id="quizResult"></div>
+    <div class="quiz-buttons">
+        <button id="checkAnswer" style="background: #4caf50; color: white;">정답 확인</button>
+        <button id="nextQuestion" style="display:none; background: #2196f3; color: white;">다음 문제</button>
+        <button id="closeQuiz" style="background: #f44336; color: white;">닫기</button>
+    </div>
+</div>
+
+<!-- 북마크 모달 -->
+<div class="modal-overlay" id="bookmarkOverlay"></div>
+<div class="modal" id="bookmarkPanel">
+    <h2 style="margin-top: 0;">🔖 내 북마크</h2>
+    <ul id="bookmarkList"></ul>
+    <button onclick="closeBookmarkPanel()" style="width: 100%; padding: 10px; background: #36c; color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 15px;">닫기</button>
+</div>
+
+<!-- 시각자료 모달 -->
+<div class="visual-overlay" id="visualOverlay"></div>
+<div class="visual-content" id="visualContent">
+    <button class="close-visual" onclick="closeVisual()">×</button>
+    <div id="visualContentInner"></div>
+</div>
+
+<div id="sidebar">
+    <h2>📚 목차</h2>
+    <input type="text" id="searchBox" placeholder="🔍 검색어를 입력하세요...">
+    <ul>
+        <li><a href="#soil">1. 지반 및 흙막이벽</a></li>
+        <li><a href="#test">2. 시험 및 비파괴</a></li>
+        <li><a href="#curtain">3. 커튼월 및 유리</a></li>
+        <li><a href="#concrete">4. 콘크리트 공사</a></li>
+        <li><a href="#rebar">5. 철근 공사</a></li>
+        <li><a href="#foundation">6. 기초 및 구조</a></li>
+        <li><a href="#values">7. 암기값 (숫자)</a></li>
+        <li><a href="#form">8. 거푸집 및 가설재</a></li>
+        <li><a href="#waterproof">9. 방수 및 마감</a></li>
+        <li><a href="#steel">10. 강구조 및 용접</a></li>
+        <li><a href="#material">11. 재료 및 조적/목공</a></li>
+        <li><a href="#management">12. 건설경영/TQC/계약</a></li>
+    </ul>
+</div>
+
+<div id="content">
+    <h1>🏗️ 건축기사 실기 암기 위키</h1>
+    <p style="background: #e3f2fd; padding: 15px; border-left: 4px solid #36c; border-radius: 5px;">
+        본 위키는 합격을 위한 <strong>원문 중심</strong>의 암기장입니다. <strong>빨간색</strong>은 핵심 용어, <mark>형광펜</mark>은 채점 포인트입니다.<br>
+        <span class="tooltip">💡<span class="tooltiptext">💡에 마우스를 올리면 재미있는 암기 팁이 나타나요!</span></span>
+        <button class="visual-btn" onclick="showVisual('intro')">📷</button><br>
+        <strong>🎯 사용법:</strong> 📝퀴즈(문제풀이) | 🎯암기모드(단어숨기기) | 🃏플래시카드(카드뒤집기) | 🔊음성읽기(자동낭독) | 🔖북마크(중요내용저장)
+    </p>
+
+    <h2 id="soil">1. 지반 및 흙막이벽 <button class="bookmark-btn" onclick="toggleBookmark('soil')">☆</button></h2>
+    
+    <h3>🔨 보링 및 사운딩</h3>
+    <div class="q-box" data-question="지반을 천공해 토질시료를 채취하여 지층상황을 판단하는 방법은?" data-answer="보링(Boring)">
+        <strong>보링 (Boring)</strong>: <mark>지반을 천공</mark>해 <mark>토질시료 채취</mark>하여 <mark>지층상황 판단</mark>하는 방법 
+        <span class="tooltip">💡<span class="tooltiptext">🎯 보링 = "구멍 뚫고 → 시료 꺼내서 → 지층 확인!"<br>마치 땅 속 CT 촬영! 🏥</span></span>
+        <button class="visual-btn" onclick="showVisual('boring')">📷</button><br>
+        <strong>목적</strong>: ① <mark>시료채취</mark> ② <mark>지하수위 저하</mark> ③ <mark>토질주상도 작성</mark>
+    </div>
+
+    <div class="q-box" data-question="로드 선단에 설치한 저항체로 관입, 회전, 인발 저항으로 토층 성상을 탐사하는 방법은?" data-answer="사운딩(Sounding)">
+        <strong>사운딩 (Sounding)</strong>: <mark>로드 선단</mark>에 설치한 <mark>저항체</mark>를 땅속에 삽입해 <mark>관입, 회전, 인발</mark> 등의 저항으로 토층의 성상을 탐사하는 방법
+        <span class="tooltip">💡<span class="tooltiptext">🎯 "찔러보고(관입) 돌려보고(회전) 빼보고(인발)"<br>마치 땅을 진맥하는 느낌! 👨‍⚕️</span></span><br>
+        <strong>베인테스트</strong>: <mark>보링 구멍</mark>을 이용해 <mark>+자 날개</mark>를 지반에 때려 박고 <mark>회전</mark>하며 그 <mark>회전력</mark>에 의해 지반 <mark>점착력</mark>을 판별
+        <span class="tooltip">💡<span class="tooltiptext">🎯 Vane = 십자가(✝) 모양! 점토의 끈적끈적함 체크! 🌀</span></span>
+    </div>
+
+    <h3>💪 압밀 및 다짐</h3>
+    <div class="q-box" data-question="점토지반에 외력을 가해 흙 속 간극수를 빼내어 하중 제거해도 침하가 남는 현상은?" data-answer="압밀">
+        <strong>압밀</strong>: <mark>점토지반</mark>에 외력을 가해 흙 속 <mark>간극수</mark>를 빼내는 것. <mark>하중이 커지면</mark> 재하판 아래 흙이 압축되어 하중을 제거해도 <mark>압축된 부분의 침하</mark>가 남아 있는 현상
+        <span class="tooltip">💡<span class="tooltiptext">🎯 압밀 = "스펀지 짜기!"🧽<br>물(간극수) 빠져나가면 다시 안 돌아옴!</span></span>
+        <button class="visual-btn" onclick="showVisual('consolidation')">📷</button><br>
+        
+        <strong>흙의 휴식각</strong>: 흙을 쌓거나 깎아냈을 때 자연상태로 생기는 <mark>경사면이 수평면과 이루는 각도</mark>
+        <span class="tooltip">💡<span class="tooltiptext">🎯 모래성 쌓으면 저절로 생기는 경사각! 🏖️</span></span><br>
+        
+        <strong>예민비</strong>: 점토에 있어서 <mark>자연시료강도</mark>는 어느 정도 강도가 있으나 이것이 <mark>함수율을 변화시키지 않고 이기면 약해지는 정도</mark>를 표시 (자연시료강도 ÷ 이긴시료강도)
+        <span class="tooltip">💡<span class="tooltiptext">🎯 "얼마나 예민한가?" 살짝 만졌는데 화내는 정도! 😤</span></span>
+    </div>
+
+    <h3>🏗️ 지반 개량공법</h3>
+    <table class="wiki-table">
+        <tr><th>공법명</th><th>원문 내용</th><th>암기팁</th></tr>
+        <tr>
+            <td><strong>샌드 드레인</strong></td>
+            <td><mark>점토질 지반</mark> 대표 탈수공법. 지반에 지름 <mark>40cm~60cm 구멍</mark> 뚫고 <mark>모래</mark> 넣어 성토 및 기타 하중을 가해 점토질 지반을 <mark>압밀</mark>하는 방법</td>
+            <td><span class="tooltip">💡<span class="tooltiptext">🎯 "진흙에 빨대(모래) 꽂기!"<br>40~60cm = 맨홀 뚜껑 크기!</span></span> <button class="visual-btn" onclick="showVisual('sand-drain')">📷</button></td>
+        </tr>
+        <tr>
+            <td><strong>페이퍼 드레인</strong></td>
+            <td>모래 대신 <mark>합성수지</mark>로 된 <mark>카드보드</mark>를 지반에 삽입해 <mark>탈수</mark>하는 지반개량공법</td>
+            <td><span class="tooltip">💡<span class="tooltiptext">🎯 Paper = 종이! 샌드드레인의 진화형! 📄</span></span></td>
+        </tr>
+        <tr>
+            <td><strong>웰 포인트</strong></td>
+            <td><mark>사질지반</mark> 대표 탈수공법. 직경 약 <mark>20cm 특수파이프</mark>를 상호 <mark>2mm 내외 간격</mark>으로 관입, <mark>모래투입</mark> 한 후 <mark>진동다짐</mark>하여 탈수통로 형성</td>
+            <td><span class="tooltip">💡<span class="tooltiptext">🎯 Well Point = 우물(井)!<br>샌드는 점토 40~60cm, 웰은 모래 20cm!</span></span></td>
+        </tr>
+        <tr>
+            <td><strong>생석회 말뚝</strong></td>
+            <td>지반 내에 <mark>생석회</mark>에 의한 말뚝을 설치해 흙을 <mark>고결화</mark>시켜 연약지반의 강화를 도모하는 방법</td>
+            <td><span class="tooltip">💡<span class="tooltiptext">🎯 생석회 만나면 물 흡수 → 딱딱! 🪨</span></span></td>
+        </tr>
+    </table>
+
+    <h3>⚠️ 히빙과 보일링</h3>
+    <div class="q-box" data-question="흙막이 벽의 좌우 토압 차에 의해 흙이 벽 밑으로 미끄러져 들어오는 현상은?" data-answer="히빙(Heaving)">
+        <strong>히빙</strong>: 흙막이 벽의 <mark>좌측과 우측 토압 차</mark>에 의해 흙막이벽 <mark>밑으로 흙이 미끄러져 들어오는</mark> 현상
+        <span class="tooltip">💡<span class="tooltiptext">🎯 Heave = 들썩! 토압 차이로 흙이 빙글~ 🌊</span></span>
+        <button class="visual-btn" onclick="showVisual('heaving')">📷</button><br>
+        
+        <strong>보일링</strong>: 흙막이벽 뒷면 <mark>수위</mark>가 높아 <mark>지하수</mark>가 흙막이벽 밑으로 공사장 안 바닥에서 <mark>물이 솟는</mark> 현상
+        <span class="tooltip">💡<span class="tooltiptext">🎯 Boiling = 보글보글! 물이 솟음! ⛲<br>히빙=흙, 보일링=물!</span></span><br>
+        
+        <strong>공통 방지대책</strong>: ① 흙막이벽 <mark>근입장 증가</mark> ② <mark>배수공법</mark> 이용해 지하수위 저하 ③ 지반 개량하여 <mark>전단강도</mark>를 크게 함
+        <span class="tooltip">💡<span class="tooltiptext">🎯 "근-배-전" 세 글자만! 🎯</span></span>
+    </div>
+
+    <h3>📏 계측기 설치위치</h3>
+    <div class="q-box">
+        <strong>하중계(Load cell)</strong>: <mark>버팀대 양단부</mark> | <strong>토압계</strong>: <mark>토압 측정위치 지중</mark> | <strong>변형률계</strong>: <mark>버팀대 중앙부</mark> | <strong>경사계</strong>: <mark>인접구조물 골조/벽체</mark>
+        <span class="tooltip">💡<span class="tooltiptext">🎯 하중=양끝, 변형=중앙, 경사=옆건물!</span></span><br>
+        <strong>기타</strong>: <mark>Piezo meter</mark>(간극수압), <mark>Inclinometer</mark>(수평변위)
+    </div>
+
+    <h3>🧱 슬러리월 및 SPS</h3>
+    <div class="q-box" data-question="벤토나이트를 이용해 철근망 세우고 콘크리트 타설하는 공법은?" data-answer="슬러리월">
+        <strong>슬러리월</strong>: 특수굴착기, 공벽붕괴방지용 <mark>벤토나이트</mark> 이용. 지중굴착해 <mark>철근망</mark> 세우고 <mark>콘크리트</mark> 타설
+        <span class="tooltip">💡<span class="tooltiptext">🎯 Slurry = 진흙물! 벽 무너지는 거 막고 → 철근+콘크리트! 🏗️</span></span><br>
+        <strong>장점</strong>: 벽체간 <mark>강성, 차수성</mark>이 큼. <mark>소음, 진동</mark>이 적음
+        <span class="tooltip">💡<span class="tooltiptext">🎯 "강차소진" - 도심지 공사의 왕! 👑</span></span><br>
+        <strong>가이드월 목적</strong>: 연속벽의 <mark>수직도, 벽두께 유지</mark>. <mark>안정액 수위유지</mark>, 우수침투 방지<br>
+        <strong>SPS 특징</strong>: 가설지지체 설치/해체공정 불필요. 지상공사와 병행 가능(공기단축). 작업공간 확보 유리.
+        <span class="tooltip">💡<span class="tooltiptext">🎯 SPS = "동시 다발적!" 위아래 동시 공사! ⏱️</span></span>
+    </div>
+
+    <h2 id="test">2. 시험 및 비파괴 <button class="bookmark-btn" onclick="toggleBookmark('test')">☆</button></h2>
+    <div class="q-box" data-question="콘크리트 비파괴 시험 3가지는?" data-answer="초음파 속도법, 슈미트 해머법, 인발법">
+        <strong>콘크리트 비파괴 시험</strong>: <mark>초음파 속도법</mark>, <mark>슈미트 해머법</mark>, <mark>인발법</mark>
+        <span class="tooltip">💡<span class="tooltiptext">🎯 "초슈인" - 안 깨고 검사하는 3총사! 🔍</span></span><br>
+        <strong>강구조 비파괴 시험</strong>: <mark>초음파 탐상법</mark>, <mark>방사선 투과법</mark>, <mark>자기분말 탐상법</mark>
+        <span class="tooltip">💡<span class="tooltiptext">🎯 "초방자" - 철강 결함 찾는 의사들! 👨‍⚕️</span></span>
+    </div>
+
+    <h2 id="curtain">3. 커튼월 및 유리 <button class="bookmark-btn" onclick="toggleBookmark('curtain')">☆</button></h2>
+    <div class="q-box">
+        <strong>외관형태</strong>: <mark>멀리언, 스팬드럴, 피복, 격자</mark> 방식
+        <span class="tooltip">💡<span class="tooltiptext">🎯 멀리언=세로, 스팬드럴=가로!</span></span><br>
+        <strong>목업테스트</strong>: <mark>기밀, 수밀, 구조성능, 영구변형</mark> 시험
+        <span class="tooltip">💡<span class="tooltiptext">🎯 "기수구영" - 실물 크기 테스트! 🏢</span></span><br>
+        <strong>오픈 조인트</strong>: 벽의 외측면과 내측면 사이 공간을 두고 <mark>외기압과 등압을 유지</mark>시켜 압력차를 없애는 방법
+    </div>
+
+    <div class="q-box" data-question="가열 후 서냉하여 24MPa 이상 압축응력층을 형성하는 유리는?" data-answer="배강도 유리">
+        <strong>배강도 유리</strong>: 가열 후 <mark>서냉</mark>하여 <mark>24MPa 이상 압축응력층</mark> 형성. 일반의 2~3배 강도
+        <span class="tooltip">💡<span class="tooltiptext">🎯 서서히 식히면 = 배로 강해져! 24MPa 기억!</span></span><br>
+        <strong>로이 유리</strong>: <mark>은소재 도막 코팅</mark>. 열적외선 반사 에너지 절약형
+        <span class="tooltip">💡<span class="tooltiptext">🎯 Low-E! 은(Ag) 코팅으로 열 반사! 💰</span></span><br>
+        <strong>열파손 메커니즘</strong>: 유리 중앙부는 태양열로 <mark>온도상승/팽창</mark>, 주변부는 <mark>저온/수축</mark>하여 <mark>열팽창 차이</mark>에 의해 파손 발생
+        <span class="tooltip">💡<span class="tooltiptext">🎯 온도차 → 팽창차 → 파손! 💥</span></span>
+    </div>
+
+    <h2 id="concrete">4. 콘크리트 공사 <button class="bookmark-btn" onclick="toggleBookmark('concrete')">☆</button></h2>
+    
+    <h3>📖 콘크리트 용어</h3>
+    <div class="q-box">
+        <strong>반죽질기</strong>: <mark>수량</mark>에 의해 변화하는 콘크리트 <mark>유동성</mark>의 정도
+        <span class="tooltip">💡<span class="tooltiptext">🎯 물 많으면 질척! 🍰</span></span><br>
+        <strong>시공연도</strong>: <mark>작업의 난이정도</mark> 및 <mark>재료분리에 저항</mark>하는 정도
+        <span class="tooltip">💡<span class="tooltiptext">🎯 Workability = 얼마나 다루기 쉬운가!</span></span><br>
+        <strong>크리프</strong>: <mark>하중의 증가가 없어도</mark> 시간 흐름에 따라 <mark>변형이 증가</mark>하는 굳은 콘크리트의 <mark>소성변형</mark> 현상
+        <span class="tooltip">💡<span class="tooltiptext">🎯 Creep = 천천히 기어간다!🐌 하중 안 늘렸는데 혼자 늘어남!</span></span><br>
+        <strong>블리딩</strong>: 굳지 않은 콘크리트의 윗면에 <mark>물이 스며오르는</mark> 것
+        <span class="tooltip">💡<span class="tooltiptext">🎯 Bleed = 물이 배어나옴!💧</span></span><br>
+        <strong>레이턴스</strong>: 블리딩 수의 증발에 따라 콘크리트 면에 침적된 <mark>백색 미세 물질</mark>
+        <span class="tooltip">💡<span class="tooltiptext">🎯 블리딩 물 마르면 → 하얀 때! 🛁</span></span><br>
+        <strong>소성수축균열</strong>: <mark>물 증발 속도</mark>가 <mark>블리딩 속도</mark>보다 빠를 때 발생
+        <span class="tooltip">💡<span class="tooltiptext">🎯 증발 > 블리딩 = 균열! ☀️</span></span>
+    </div>
+
+    <h3>🏗️ 콘크리트 종류</h3>
+    <div class="q-box">
+        <strong>중량 콘크리트</strong>: <mark>방사선 차폐</mark> 목적. 철광석, 중정석 사용<br>
+        <strong>매스 콘크리트</strong>: 부재 단면 <mark>80cm 이상</mark>, 온도차 <mark>25℃ 이상</mark> 예상 시
+        <span class="tooltip">💡<span class="tooltiptext">🎯 80cm / 25℃ - 두 숫자만!</span></span><br>
+        <strong>고강도 콘크리트</strong>: 일반 <mark>40MPa</mark>, 경량 <mark>27MPa</mark> 이상
+        <span class="tooltip">💡<span class="tooltiptext">🎯 일반 40 / 경량 27</span></span><br>
+        <strong>프리팩트 콘크리트</strong>: 거푸집에 <mark>굵은골재</mark> 채운 후 <mark>특수 몰탈 주입</mark>
+        <span class="tooltip">💡<span class="tooltiptext">🎯 Pre-packed! 자갈 먼저 → 시멘트 주입! 🔄</span></span>
+    </div>
+
+    <h3>⚡ 균열 및 줄눈</h3>
+    <table class="wiki-table">
+        <tr><th>명칭</th><th>정의</th><th>암기팁</th></tr>
+        <tr><td><strong>신축줄눈</strong></td><td>온도변화 팽창/수축, 부등침하 대비 설치</td><td><span class="tooltip">💡<span class="tooltiptext">🎯 신축 = 늘었다줄었다!</span></span></td></tr>
+        <tr><td><strong>콜드조인트</strong></td><td>이어치기 시 일체화되지 않아 발생하는 <mark>계획되지 않은</mark> 줄눈</td><td><span class="tooltip">💡<span class="tooltiptext">🎯 Cold = 식어서 안 붙음 = 불량! 계획X!</span></span></td></tr>
+        <tr><td><strong>시공줄눈</strong></td><td>작업관계로 경화된 면에 새로 타설하여 생기는 <mark>계획된</mark> 줄눈</td><td><span class="tooltip">💡<span class="tooltiptext">🎯 계획O = 착한 놈!</span></span></td></tr>
+        <tr><td><strong>지연줄눈</strong></td><td>초기건조수축 완료 후 나머지 타설 목적 설치</td><td><span class="tooltip">💡<span class="tooltiptext">🎯 Delay! 기다렸다가 타설!⏰</span></span></td></tr>
+    </table>
+
+    <h3>🧪 시험</h3>
+    <div class="q-box" data-question="반죽질기 측정방법 4가지는?" data-answer="슬럼프 시험, 슬럼프 플로, 구 관입 시험, 비비 시험">
+        <strong>반죽질기 측정</strong>: <mark>슬럼프 시험, 슬럼프 플로, 구 관입 시험, 비비 시험</mark>
+        <span class="tooltip">💡<span class="tooltiptext">🎯 "슬슬구비!" 📏</span></span><br>
+        <strong>물시멘트비(W/C) 높을 때 결점</strong>: ① <mark>강도저하</mark> ② <mark>내구성, 수밀성 저하</mark> ③ <mark>재료분리 및 블리딩 증가</mark> ④ <mark>건조수축 및 침강균열 증가</mark>
+        <span class="tooltip">💡<span class="tooltiptext">🎯 물 많으면 = 모두 나빠져!💧</span></span>
+    </div>
+
+    <h2 id="rebar">5. 철근 공사 <button class="bookmark-btn" onclick="toggleBookmark('rebar')">☆</button></h2>
+    <div class="q-box" data-question="인장철근이 항복강도에 도달함과 동시에 압축연단 콘크리트가 극한변형률에 도달하는 상태는?" data-answer="균형철근비">
+        <strong>균형철근비</strong>: 인장철근이 <mark>항복강도</mark>에 도달함과 동시에 압축연단 콘크리트 변형률이 <mark>극한변형률</mark>에 도달하는 상태
+        <span class="tooltip">💡<span class="tooltiptext">🎯 철근+콘크리트 동시에 한계! 완벽한 밸런스! ⚖️</span></span><br>
+        <strong>배력근</strong>: <mark>하중 분포</mark> 또는 <mark>균열 제어</mark> 목적으로 주철근과 직각 방향 배치 보조철근
+        <span class="tooltip">💡<span class="tooltiptext">🎯 배력 = 힘을 배분! 십자(十) 배치!</span></span><br>
+        <strong>부식방지대책</strong>: 에폭시코팅, 아연도금, 제염제 혼입, 방청제 혼입
+        <span class="tooltip">💡<span class="tooltiptext">🎯 "에아제방" - 녹 방지 4총사! 🛡️</span></span><br>
+        <strong>가스압접 불가</strong>: 항복강도 다를 때, 직경 차 <mark>6mm 초과</mark>, 0℃ 이하 작업 시
+        <span class="tooltip">💡<span class="tooltiptext">🎯 6mm / 0℃ - 두 숫자만!</span></span>
+    </div>
+
+    <h2 id="foundation">6. 기초 및 구조 <button class="bookmark-btn" onclick="toggleBookmark('foundation')">☆</button></h2>
+    <div class="q-box" data-question="기존 건축물 기초 보강 또는 보호, 인접건물 침하 예방 목적 공법은?" data-answer="언더피닝(Underpinning)">
+        <strong>언더피닝</strong>: 기존 건축물 <mark>기초 보강</mark> 또는 보호, 인접건물 침하 예방 목적 공법
+        <span class="tooltip">💡<span class="tooltiptext">🎯 Under-pinning = 밑에서 받쳐주기! 🏠⬆️</span></span><br>
+        <strong>부상 방지대책</strong>: 지하수 유입 구멍, <mark>건물 자중 증가</mark>, 인접건물 긴결, <mark>강제 펌핑</mark>
+        <span class="tooltip">💡<span class="tooltiptext">🎯 뜨지 않게 = 무겁게 or 물 빼기! 🚢</span></span><br>
+        <strong>어스앵커</strong>: 흙막이 배면 굴착 후 <mark>앵커체 설치</mark>해 주변지반 지지. <mark>버팀대 없어</mark> 작업공간 확보 유리
+        <span class="tooltip">💡<span class="tooltiptext">🎯 Earth Anchor = 땅에 닻!⚓ 공간 넓어!</span></span>
+    </div>
+
+    <h2 id="values">7. 암기값 (숫자) <button class="bookmark-btn" onclick="toggleBookmark('values')">☆</button></h2>
+    <div class="q-box" style="border-left-color: #f44336;">
+        <h4 style="color: #f44336; margin-top: 0;">⚠️ 시험 단골 숫자 - 반드시 암기!</h4>
+        <strong>이어치기 시간간격</strong>: 외기온 <mark>25℃ 미만일 때는 150분</mark>, <mark>25℃ 이상일 때는 120분</mark>
+        <span class="tooltip">💡<span class="tooltiptext">🎯 시원하면 150 / 더우면 120!</span></span><br>
+        <strong>철근 순간격</strong>: <mark>굵은골재 최대치수의 4/3배</mark> 이상, <mark>25mm</mark> 이상, <mark>이형철근 공칭직경의 1배</mark> 이상
+        <span class="tooltip">💡<span class="tooltiptext">🎯 4/3배 / 25mm / 1배 - 세 개 중 큰 거!</span></span><br>
+        <strong>피복두께</strong>: 수중콘크리트 타설 시 <mark>100mm</mark>
+        <span class="tooltip">💡<span class="tooltiptext">🎯 물속이라 두껍게!</span></span><br>
+        <strong>말뚝 중심간격</strong>: 기성콘크리트말뚝 타설 시 <mark>말뚝지름의 2.5배</mark> 이상, 또한 <mark>750mm</mark> 이상
+        <span class="tooltip">💡<span class="tooltiptext">🎯 2.5배 / 750mm - 둘 다 만족!</span></span><br>
+        <strong>되메우기</strong>: <mark>300mm</mark> 마다 다짐밀도 <mark>95%</mark> 이상
+        <span class="tooltip">💡<span class="tooltiptext">🎯 30cm마다 / 95% 이상!</span></span>
+    </div>
+
+    <h2 id="form">8. 거푸집 및 가설재 <button class="bookmark-btn" onclick="toggleBookmark('form')">☆</button></h2>
+    <div class="q-box">
+        <strong>슬라이딩폼</strong>: <mark>연속 이동</mark> 타설, 시공이음 없는 균일 시공
+        <span class="tooltip">💡<span class="tooltiptext">🎯 Sliding = 미끄러지듯 올라가!⬆️</span></span><br>
+        <strong>플라잉폼</strong>: 거푸집널, 장선, 멍에, 서포트 <mark>일체 제작</mark> 수평/수직 이동 시스템
+        <span class="tooltip">💡<span class="tooltiptext">🎯 Flying = 날아다니는 거푸집!🦅</span></span><br>
+        <strong>측압 증가 요인</strong>: <mark>벽두께</mark> 두꺼울수록, <mark>습도</mark> 높을수록, <mark>슬럼프</mark> 높을수록, <mark>타설속도</mark> 빠를수록
+        <span class="tooltip">💡<span class="tooltiptext">🎯 "두습슬속!" 💥</span></span><br>
+        <strong>잭서포트</strong>: 해체 후 차량진동/하중에 의한 <mark>균열 방지</mark> 가설지주
+        <span class="tooltip">💡<span class="tooltiptext">🎯 Jack Support = 보험용 지주! 🦺</span></span>
+    </div>
+
+    <h2 id="waterproof">9. 방수 및 마감 <button class="bookmark-btn" onclick="toggleBookmark('waterproof')">☆</button></h2>
+    <div class="q-box">
+        <strong>안방수 vs 바깥방수</strong>: 안방수는 <mark>저렴</mark>하나 수압에 약함. 바깥방수는 <mark>비싸나</mark> 수압에 강함<br>
+        <strong>액세스 플로어</strong>: 공조, 배관, 통신 설비 설치를 위한 <mark>2중 바닥구조</mark>
+        <span class="tooltip">💡<span class="tooltiptext">🎯 Access Floor = 접근 가능한 바닥! 🖥️</span></span><br>
+        <strong>석고보드 단점</strong>: <mark>습기</mark>에 취약(지하 사용금지), 동절기 사용 곤란
+        <span class="tooltip">💡<span class="tooltiptext">🎯 석고 = 물 만나면 죽어!💦</span></span><br>
+        <strong>손질바름</strong>: 마감두께 균일 조정 및 균열 보수 | <strong>실러바름</strong>: 바탕 흡수조정 및 접착력 증진
+    </div>
+
+    <h2 id="steel">10. 강구조 및 용접 <button class="bookmark-btn" onclick="toggleBookmark('steel')">☆</button></h2>
+    <div class="q-box">
+        <strong>칼럼 쇼트닝</strong>: 초고층 건축 시 기둥에 발생하는 <mark>축소변위</mark>
+        <span class="tooltip">💡<span class="tooltiptext">🎯 Column Shortening = 기둥 짧아짐! 🏙️</span></span><br>
+        <strong>라멜라 테어링</strong>: 판두께 방향 인장 구속력으로 인한 <mark>박리 상의 균열</mark>
+        <span class="tooltip">💡<span class="tooltiptext">🎯 Lamellar Tearing = 층층이 찢어짐! 💥</span></span><br>
+        <strong>밀시트</strong>: 제조업체의 <mark>품질보증서</mark> (제품 치수 확인 가능)
+        <span class="tooltip">💡<span class="tooltiptext">🎯 Mill Sheet = 제철소 성적표!📋</span></span>
+    </div>
+
+    <table class="wiki-table">
+        <tr><th>명칭</th><th>정의</th></tr>
+        <tr><td><strong>언더컷</strong></td><td>용접상부에 <mark>모재가 녹아</mark> 용착금속이 채워지지 않고 <mark>흠으로 남은</mark> 부분 <span class="tooltip">💡<span class="tooltiptext">🎯 Under-cut = 밑으로 파임! 🔻</span></span></td></tr>
+        <tr><td><strong>오버랩</strong></td><td>용접금속과 모재가 <mark>융합되지 않고</mark> 단순히 <mark>겹쳐지는</mark> 것 <span class="tooltip">💡<span class="tooltiptext">🎯 Over-lap = 위에 덮어씀! 📑</span></span></td></tr>
+        <tr><td><strong>블로홀</strong></td><td>용융금속이 응고할 때 방출되었어야 할 <mark>가스가 남아</mark> 생기는 용접부의 <mark>빈 자리</mark> <span class="tooltip">💡<span class="tooltiptext">🎯 Blow-hole = 바람구멍!💨</span></span></td></tr>
+    </table>
+
+    <h2 id="material">11. 재료 및 조적/목공 <button class="bookmark-btn" onclick="toggleBookmark('material')">☆</button></h2>
+    <div class="q-box">
+        <strong>백화현상</strong>: 수산화칼슘과 탄산가스 반응. 대책: <mark>흡수율 작은 벽돌</mark>, 처마 설치, <mark>발수제 도포</mark>
+        <span class="tooltip">💡<span class="tooltiptext">🎯 백화 = 하얀 꽃!🌸 Ca(OH)₂ + CO₂!</span></span><br>
+        <strong>AE제 목적</strong>: <mark>단위수량 감소, 재료분리 감소, 동결융해저항성 증대</mark>
+        <span class="tooltip">💡<span class="tooltiptext">🎯 AE = Air Entraining! "단-재-동"❄️</span></span><br>
+        <strong>목재 섬유포화점</strong>: 함수율 <mark>30%</mark>. 이하는 강도 급증, 이상은 변화 없음
+        <span class="tooltip">💡<span class="tooltiptext">🎯 30% = 섬유포화점! 🌲</span></span><br>
+        <strong>방부처리</strong>: 침지법, 주입법, 도포법, 표면탄화법
+        <span class="tooltip">💡<span class="tooltiptext">🎯 "침주도표!" 🔥</span></span>
+    </div>
+
+    <h2 id="management">12. 건설경영 및 품질관리 <button class="bookmark-btn" onclick="toggleBookmark('management')">☆</button></h2>
+    <div class="q-box" data-question="민간이 설계, 시공 후 공공에 양도하고 일정기간 운영하는 방식은?" data-answer="BTO">
+        <strong>BTO</strong>: 민간부분이 설계, 시공 후 공공부분에게 <mark>시설물을 양도</mark>하고 <mark>일정기간 운영</mark>하여 투자금액 회수
+        <span class="tooltip">💡<span class="tooltiptext">🎯 BTO = 짓고(B) → 주고(T) → 운영(O)! 🛣️</span></span><br>
+        <strong>BTL</strong>: 민간부분이 설계, 시공 후 공공부분에게 <mark>소유권을 이전</mark>한 후 <mark>시설물 임대료</mark>를 받는 방식
+        <span class="tooltip">💡<span class="tooltiptext">🎯 BTL = 짓고(B) → 주고(T) → 빌려줌(L)! 🏫<br>O=운영 / L=임대</span></span>
+    </div>
+
+    <div class="q-box">
+        <strong>히스토그램</strong>: 데이터가 어떠한 <mark>분포</mark>를 하고 있는지 나타내는 그림
+        <span class="tooltip">💡<span class="tooltiptext">🎯 Histogram = 막대 그래프!📊</span></span><br>
+        <strong>파레토도</strong>: 데이터를 <mark>불량 크기 순서</mark>대로 나열한 그림
+        <span class="tooltip">💡<span class="tooltiptext">🎯 Pareto = 80:20 법칙! 📈</span></span><br>
+        <strong>특성요인도</strong>: 결과에 어떤 <mark>원인</mark>이 관계하는지 나타낸 그림 (<mark>물고기 뼈</mark> 모양)
+        <span class="tooltip">💡<span class="tooltiptext">🎯 Fish-bone Diagram = 생선 가시!🐟</span></span><br>
+        <strong>산점도</strong>: 두 개의 대응하는 데이터를 <mark>하나의 점</mark>으로 나타낸 그림
+        <span class="tooltip">💡<span class="tooltiptext">🎯 Scatter Plot = 점 뿌리기! 📍</span></span>
+    </div>
+
+    <div class="q-box" data-question="VE 사고방식 중 핵심적인 두 가지는?" data-answer="고객중심, 기능중심">
+        <strong>VE 사고방식</strong>: <mark>고객중심, 기능중심</mark>, 고정관념 제거, 조직적 사고
+        <span class="tooltip">💡<span class="tooltiptext">🎯 Value Engineering = 가치↑ 비용↓! "고기고조"</span></span>
+    </div>
+
+</div>
+
+<button id="scrollTop">↑</button>
+
+<script>
+// ========== 전역 변수 ==========
+let quizMode = false;
+let flashcardMode = false;
+let voiceMode = false;
+let bookmarks = JSON.parse(localStorage.getItem('buildingBookmarks') || '[]');
+let currentUtterance = null;
+let quizData = [];
+let currentQuiz = null;
+let correctCount = 0;
+let wrongCount = 0;
+
+// ========== 기본 기능 ==========
+document.getElementById('menuToggle').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('show');
+});
+
+document.querySelectorAll('#sidebar a').forEach(link => {
+    link.addEventListener('click', () => {
+        if (window.innerWidth <= 1024) {
+            document.getElementById('sidebar').classList.remove('show');
+        }
+    });
+});
+
+window.onscroll = function() {
+    const scrollTop = document.getElementById('scrollTop');
+    scrollTop.style.display = (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) ? "block" : "none";
+    updateProgressBar();
+    highlightCurrentSection();
+};
+
+document.getElementById('scrollTop').addEventListener('click', () => {
+    window.scrollTo({top: 0, behavior: 'smooth'});
+});
+
+function updateProgressBar() {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    document.getElementById('progressBar').style.width = scrolled + "%";
+}
+
+function highlightCurrentSection() {
+    const sections = document.querySelectorAll('h2');
+    const links = document.querySelectorAll('#sidebar a');
+    let current = '';
+    
+    sections.forEach(section => {
+        if (window.pageYOffset >= section.offsetTop - 100) {
+            current = section.getAttribute('id');
+        }
+    });
+    
+    links.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) {
+            link.classList.add('active');
+        }
+    });
+}
+
+// ========== 검색 ==========
+document.getElementById('searchBox').addEventListener('input', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    const content = document.getElementById('content');
+    
+    content.innerHTML = content.innerHTML.replace(/<span class="highlight-search">(.*?)<\/span>/gi, '$1');
+    
+    if (searchTerm.length < 2) return;
+    
+    const textContent = content.textContent;
+    if (textContent.toLowerCase().includes(searchTerm)) {
+        const firstMatch = document.querySelector(`#content:contains("${searchTerm}")`);
+        if (firstMatch) firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+});
+
+// ========== 암기모드 ==========
+document.getElementById('quizToggle').addEventListener('click', function() {
+    quizMode = !quizMode;
+    const content = document.getElementById('content');
+    
+    if (quizMode) {
+        content.classList.add('quiz-mode');
+        this.textContent = '✅ 암기모드 OFF';
+        this.classList.add('active');
+        
+        document.querySelectorAll('.quiz-mode mark').forEach(mark => {
+            mark.addEventListener('click', function() {
+                this.classList.toggle('revealed');
+            });
+        });
+    } else {
+        content.classList.remove('quiz-mode');
+        this.textContent = '🎯 암기모드';
+        this.classList.remove('active');
+        document.querySelectorAll('mark').forEach(mark => mark.classList.remove('revealed'));
+    }
+});
+
+// ========== 플래시카드 ==========
+document.getElementById('flashcardToggle').addEventListener('click', function() {
+    flashcardMode = !flashcardMode;
+    const content = document.getElementById('content');
+    
+    if (flashcardMode) {
+        content.classList.add('flashcard-mode');
+        this.textContent = '🃏 플래시카드 OFF';
+        this.classList.add('active');
+        
+        document.querySelectorAll('.flashcard-mode .q-box').forEach(box => {
+            const question = box.getAttribute('data-question');
+            if (question) {
+                const originalContent = box.innerHTML;
+                box.setAttribute('data-original', originalContent);
+                box.innerHTML = `<div class="flashcard-front">${question}</div><div class="flashcard-back">${originalContent}</div>`;
+                box.addEventListener('click', function() {
+                    this.classList.toggle('flipped');
+                });
+            }
+        });
+    } else {
+        content.classList.remove('flashcard-mode');
+        this.textContent = '🃏 플래시카드';
+        this.classList.remove('active');
+        
+        document.querySelectorAll('.q-box').forEach(box => {
+            const original = box.getAttribute('data-original');
+            if (original) {
+                box.innerHTML = original;
+                box.classList.remove('flipped');
+            }
+        });
+    }
+});
+
+// ========== 음성읽기 ==========
+document.getElementById('voiceToggle').addEventListener('click', function() {
+    voiceMode = !voiceMode;
+    
+    if (voiceMode) {
+        this.textContent = '🔇 음성 OFF';
+        this.classList.add('active');
+        startVoiceReading();
+    } else {
+        this.textContent = '🔊 음성읽기';
+        this.classList.remove('active');
+        stopVoiceReading();
+    }
+});
+
+function startVoiceReading() {
+    const elements = document.querySelectorAll('#content p, #content .q-box, #content h2, #content h3');
+    let index = 0;
+    
+    function readNext() {
+        if (!voiceMode || index >= elements.length) {
+            stopVoiceReading();
+            return;
+        }
+        
+        const element = elements[index];
+        const text = element.textContent.replace(/[💡📷🔖☆★]/g, '').trim();
+        
+        if (text.length > 0) {
+            element.classList.add('reading-highlight');
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            currentUtterance = new SpeechSynthesisUtterance(text);
+            currentUtterance.lang = 'ko-KR';
+            currentUtterance.rate = 0.9;
+            
+            currentUtterance.onend = function() {
+                element.classList.remove('reading-highlight');
+                index++;
+                setTimeout(readNext, 500);
+            };
+            
+            window.speechSynthesis.speak(currentUtterance);
+        } else {
+            index++;
+            readNext();
+        }
+    }
+    
+    readNext();
+}
+
+function stopVoiceReading() {
+    voiceMode = false;
+    if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+    }
+    document.querySelectorAll('.reading-highlight').forEach(el => el.classList.remove('reading-highlight'));
+}
+
+// ========== 퀴즈 ==========
+function initQuizData() {
+    quizData = [];
+    document.querySelectorAll('.q-box[data-question]').forEach(box => {
+        const question = box.getAttribute('data-question');
+        const answer = box.getAttribute('data-answer');
+        if (question && answer) {
+            quizData.push({ question, answer });
+        }
+    });
+}
+
+document.getElementById('quizModeBtn').addEventListener('click', () => {
+    initQuizData();
+    if (quizData.length === 0) {
+        alert('퀴즈로 만들 수 있는 문제가 없습니다!');
+        return;
+    }
+    showQuiz();
+});
+
+function showQuiz() {
+    currentQuiz = quizData[Math.floor(Math.random() * quizData.length)];
+    const wrongAnswers = quizData.filter(q => q.answer !== currentQuiz.answer).map(q => q.answer).sort(() => Math.random() - 0.5).slice(0, 3);
+    const allOptions = [currentQuiz.answer, ...wrongAnswers].sort(() => Math.random() - 0.5);
+    
+    document.getElementById('quizQuestion').textContent = currentQuiz.question;
+    document.getElementById('quizOptions').innerHTML = allOptions.map(option => 
+        `<div class="quiz-option" data-answer="${option}">${option}</div>`
+    ).join('');
+    
+    document.getElementById('quizResult').innerHTML = '';
+    document.getElementById('quizResult').className = '';
+    document.getElementById('checkAnswer').style.display = 'inline-block';
+    document.getElementById('nextQuestion').style.display = 'none';
+    document.getElementById('correctCount').textContent = correctCount;
+    document.getElementById('wrongCount').textContent = wrongCount;
+    
+    document.getElementById('quizModal').classList.add('show');
+    document.getElementById('quizOverlay').classList.add('show');
+    
+    document.querySelectorAll('.quiz-option').forEach(option => {
+        option.addEventListener('click', function() {
+            document.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
+            this.classList.add('selected');
+        });
+    });
+}
+
+document.getElementById('checkAnswer').addEventListener('click', function() {
+    const selected = document.querySelector('.quiz-option.selected');
+    if (!selected) {
+        alert('답을 선택해주세요!');
+        return;
+    }
+    
+    const isCorrect = selected.getAttribute('data-answer') === currentQuiz.answer;
+    
+    document.querySelectorAll('.quiz-option').forEach(option => {
+        if (option.getAttribute('data-answer') === currentQuiz.answer) {
+            option.classList.add('correct');
+        } else if (option.classList.contains('selected')) {
+            option.classList.add('wrong');
+        }
+        option.style.pointerEvents = 'none';
+    });
+    
+    const resultDiv = document.getElementById('quizResult');
+    if (isCorrect) {
+        correctCount++;
+        resultDiv.textContent = '🎉 정답입니다!';
+        resultDiv.className = 'correct';
+    } else {
+        wrongCount++;
+        resultDiv.textContent = `❌ 틀렸습니다. 정답은 "${currentQuiz.answer}" 입니다.`;
+        resultDiv.className = 'wrong';
+    }
+    
+    document.getElementById('correctCount').textContent = correctCount;
+    document.getElementById('wrongCount').textContent = wrongCount;
+    this.style.display = 'none';
+    document.getElementById('nextQuestion').style.display = 'inline-block';
+});
+
+document.getElementById('nextQuestion').addEventListener('click', () => showQuiz());
+document.getElementById('closeQuiz').addEventListener('click', () => {
+    document.getElementById('quizModal').classList.remove('show');
+    document.getElementById('quizOverlay').classList.remove('show');
+});
+document.getElementById('quizOverlay').addEventListener('click', () => {
+    document.getElementById('quizModal').classList.remove('show');
+    document.getElementById('quizOverlay').classList.remove('show');
+});
+
+// ========== 북마크 ==========
+function toggleBookmark(sectionId) {
+    const index = bookmarks.indexOf(sectionId);
+    const btn = event.target;
+    
+    if (index === -1) {
+        bookmarks.push(sectionId);
+        btn.textContent = '★';
+        btn.style.color = '#ffd700';
+    } else {
+        bookmarks.splice(index, 1);
+        btn.textContent = '☆';
+        btn.style.color = '';
+    }
+    
+    localStorage.setItem('buildingBookmarks', JSON.stringify(bookmarks));
+    updateBookmarkLinks();
+}
+
+function updateBookmarkLinks() {
+    document.querySelectorAll('#sidebar a').forEach(link => {
+        const href = link.getAttribute('href').substring(1);
+        if (bookmarks.includes(href)) {
+            link.classList.add('bookmarked');
+        } else {
+            link.classList.remove('bookmarked');
+        }
+    });
+}
+
+document.getElementById('bookmarkToggle').addEventListener('click', () => {
+    const list = document.getElementById('bookmarkList');
+    list.innerHTML = '';
+    
+    if (bookmarks.length === 0) {
+        list.innerHTML = '<li style="text-align: center; color: #999;">북마크가 없습니다</li>';
+    } else {
+        bookmarks.forEach(id => {
+            const section = document.getElementById(id);
+            if (section) {
+                const li = document.createElement('li');
+                li.innerHTML = `<span onclick="goToSection('${id}')">${section.textContent.replace(/[🔖☆★]/g, '').trim()}</span>
+                    <button class="remove-bookmark" onclick="removeBookmark('${id}')">삭제</button>`;
+                list.appendChild(li);
+            }
+        });
+    }
+    
+    document.getElementById('bookmarkPanel').classList.add('show');
+    document.getElementById('bookmarkOverlay').classList.add('show');
+});
+
+function goToSection(id) {
+    closeBookmarkPanel();
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function removeBookmark(id) {
+    const index = bookmarks.indexOf(id);
+    if (index !== -1) {
+        bookmarks.splice(index, 1);
+        localStorage.setItem('buildingBookmarks', JSON.stringify(bookmarks));
+        document.getElementById('bookmarkToggle').click();
+        updateBookmarkLinks();
+        
+        const btn = document.querySelector(`#${id} .bookmark-btn`);
+        if (btn) {
+            btn.textContent = '☆';
+            btn.style.color = '';
+        }
+    }
+}
+
+function closeBookmarkPanel() {
+    document.getElementById('bookmarkPanel').classList.remove('show');
+    document.getElementById('bookmarkOverlay').classList.remove('show');
+}
+
+document.getElementById('bookmarkOverlay').addEventListener('click', closeBookmarkPanel);
+
+// ========== 시각자료 ==========
+const visualData = {
+    'intro': '<h3>📚 학습 사이클</h3><p style="text-align:center; font-size:2em;">📖 → 🎯 → 🃏 → 📝</p><p style="padding:20px; background:#e3f2fd; border-radius:10px;">1️⃣ <strong>읽기</strong>: 전체 내용 파악<br>2️⃣ <strong>암기모드</strong>: 핵심 단어 숨기고 테스트<br>3️⃣ <strong>플래시카드</strong>: 문제풀이<br>4️⃣ <strong>퀴즈</strong>: 최종 점검!</p>',
+    'boring': '<h3>🔨 보링</h3><p style="font-size:5em; text-align:center;">🏗️<br>⬇️<br>🪨</p><p style="padding:15px; background:#fff9c4; border-radius:8px;"><strong>보링 = 구멍 뚫고 시료 채취!</strong><br>지반을 천공해서 토질시료를 채취하여 지층 상황을 판단합니다.</p>',
+    'consolidation': '<h3>💪 압밀</h3><p style="text-align:center; font-size:3em;">🧽💧 → 🧽</p><p style="padding:15px; background:#e8f5e9; border-radius:8px;"><strong>스펀지 짜기!</strong><br>물(간극수)이 빠져나가면 다시 안 돌아옴 = 영구 침하!</p>',
+    'sand-drain': '<h3>샌드 드레인</h3><p style="text-align:center; font-size:3em;">🟫🟡🟫🟡🟫</p><p style="padding:15px; background:#fff9c4; border-radius:8px;"><strong>점토에 모래 빨대 꽂기!</strong><br>40~60cm 구멍에 모래를 넣어 탈수합니다.</p>',
+    'heaving': '<h3>⚠️ 히빙</h3><p style="text-align:center; font-size:3em;">🏗️ ⬅️ 🌊</p><p style="padding:15px; background:#ffebee; border-radius:8px;"><strong>흙이 밑으로 미끄러져 들어옴!</strong><br>토압 차이로 인한 현상</p>'
+};
+
+function showVisual(type) {
+    const content = visualData[type] || '<p>준비중입니다</p>';
+    document.getElementById('visualContentInner').innerHTML = content;
+    document.getElementById('visualContent').classList.add('show');
+    document.getElementById('visualOverlay').classList.add('show');
+}
+
+function closeVisual() {
+    document.getElementById('visualContent').classList.remove('show');
+    document.getElementById('visualOverlay').classList.remove('show');
+}
+
+document.getElementById('visualOverlay').addEventListener('click', closeVisual);
+
+// ========== 다크모드 ==========
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+    document.getElementById('darkModeToggle').textContent = '☀️';
+}
+
+document.getElementById('darkModeToggle').addEventListener('click', function() {
+    document.body.classList.toggle('dark-mode');
+    if (document.body.classList.contains('dark-mode')) {
+        this.textContent = '☀️';
+        localStorage.setItem('theme', 'dark');
+    } else {
+        this.textContent = '🌙';
+        localStorage.setItem('theme', 'light');
+    }
+});
+
+// ========== 초기화 ==========
+window.addEventListener('load', () => {
+    updateBookmarkLinks();
+    highlightCurrentSection();
+    
+    // 저장된 북마크 복원
+    bookmarks.forEach(id => {
+        const btn = document.querySelector(`#${id} .bookmark-btn`);
+        if (btn) {
+            btn.textContent = '★';
+            btn.style.color = '#ffd700';
+        }
+    });
+    
+    // 툴팁 모바일 지원
+    document.querySelectorAll('.tooltip').forEach(tooltip => {
+        tooltip.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const tooltiptext = this.querySelector('.tooltiptext');
+            tooltiptext.style.visibility = tooltiptext.style.visibility === 'visible' ? 'hidden' : 'visible';
+            tooltiptext.style.opacity = tooltiptext.style.opacity === '1' ? '0' : '1';
+        });
+    });
+    
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.tooltiptext').forEach(tip => {
+            tip.style.visibility = 'hidden';
+            tip.style.opacity = '0';
+        });
+    });
+    
+    console.log('🏗️ 건축기사 실기 암기 위키 로드 완료!');
+    console.log('💡 팁: 각 기능을 활용해서 효과적으로 암기하세요!');
+});
+</script>
+
+</body>
+</html>
